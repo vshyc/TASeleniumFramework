@@ -21,7 +21,7 @@ public class BaseTest {
 
     @BeforeAll
     public static void baseSetUp(){
-        WebDriverManager.firefoxdriver().setup();
+        WebDriverManager.firefoxdriver().clearDriverCache().setup();
         driver = new FirefoxDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
