@@ -21,7 +21,7 @@ public class BaseTest {
 
     @BeforeAll
     public static void baseSetUp(){
-        WebDriverManager.firefoxdriver().clearDriverCache().setup();
+        WebDriverManager.firefoxdriver().browserInDocker().enableVnc().enableRecording().create();
         driver = new FirefoxDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
