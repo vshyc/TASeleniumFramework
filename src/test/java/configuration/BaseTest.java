@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 ;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -16,13 +18,13 @@ import java.time.Duration;
 
 public class BaseTest {
     public static Wait<WebDriver> wait;
-    public static FirefoxDriver driver;
+    public static ChromiumDriver driver;
     public static EnvConfig envConfig = ConfigFactory.create(EnvConfig.class);
 
     @BeforeAll
     public static void baseSetUp(){
-        WebDriverManager.firefoxdriver().browserInDocker().enableVnc().enableRecording().create();
-        driver = new FirefoxDriver();
+        WebDriverManager.chromiumdriver().clearDriverCache().setup();
+        driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         wait = new FluentWait<WebDriver>(driver)
