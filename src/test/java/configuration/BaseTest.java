@@ -18,13 +18,13 @@ import java.time.Duration;
 
 public class BaseTest {
     public static Wait<WebDriver> wait;
-    public static ChromiumDriver driver;
+    public static FirefoxDriver driver;
     public static EnvConfig envConfig = ConfigFactory.create(EnvConfig.class);
 
     @BeforeAll
     public static void baseSetUp(){
-        WebDriverManager.chromiumdriver().clearDriverCache().setup();
-        driver = new ChromeDriver();
+//        WebDriverManager.chromiumdriver().clearDriverCache().setup();
+        driver = new FirefoxDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         wait = new FluentWait<WebDriver>(driver)
