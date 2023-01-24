@@ -6,26 +6,31 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import properties.EnvConfig;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 
 public class BaseTest {
     public static Wait<WebDriver> wait;
-    public static FirefoxDriver driver;
+    protected static ThreadLocal<RemoteWebDriver> driverRemote = new ThreadLocal<>();
+    public static WebDriver driver = driverRemote.get();
+    public static String remote_url_firefox = "http://localhost:4444/wd/hub";
     public static EnvConfig envConfig = ConfigFactory.create(EnvConfig.class);
 
     @BeforeAll
-    public static void baseSetUp(){
-        System.setProperty("webdriver.gecko.driver","src/main/resources/geckodriver");
-//        WebDriverManager.firefoxdriver().clearDriverCache().setup();
-        driver = new FirefoxDriver();
+    public static void baseSetUp() throws MalformedURLException {
+        ChromeOptions options = new ChromeOptions();
+        driverRemote.set(new RemoteWebDriver(new URL(remote_url_firefox), options));
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        wait = new FluentWait<WebDriver>(driver)
+        wait = new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(10))
                 .pollingEvery(Duration.ofSeconds(1))
                 .withMessage("Time out as the condition is not met")
@@ -33,7 +38,8 @@ public class BaseTest {
     }
 
     @AfterAll
-    public static void tearDown(){
+    public static void tearDown() {
         driver.quit();
     }
+
 }
