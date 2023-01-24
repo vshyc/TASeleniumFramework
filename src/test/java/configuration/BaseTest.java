@@ -6,9 +6,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -23,7 +20,7 @@ public class BaseTest {
 
     @BeforeAll
     public static void baseSetUp(){
-//        WebDriverManager.chromiumdriver().clearDriverCache().setup();
+        WebDriverManager.firefoxdriver().clearDriverCache().setup();
         driver = new FirefoxDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
