@@ -17,15 +17,14 @@ import java.time.Duration;
 
 public class BaseTest {
     public static Wait<WebDriver> wait;
-    protected static ThreadLocal<RemoteWebDriver> driverRemote = new ThreadLocal<>();
-    public static WebDriver driver = driverRemote.get();
+    public static WebDriver driver;
     public static String remote_url_firefox = "http://localhost:4444/wd/hub";
     public static EnvConfig envConfig = ConfigFactory.create(EnvConfig.class);
 
     @BeforeAll
     public static void baseSetUp() throws MalformedURLException {
         FirefoxOptions options = new FirefoxOptions();
-        driverRemote.set(new RemoteWebDriver(new URL(remote_url_firefox), options));
+        driver = new RemoteWebDriver(new URL(remote_url_firefox), options);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         wait = new FluentWait<>(driver)
