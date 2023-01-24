@@ -1,13 +1,11 @@
 package configuration;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -26,7 +24,7 @@ public class BaseTest {
 
     @BeforeAll
     public static void baseSetUp() throws MalformedURLException {
-        ChromeOptions options = new ChromeOptions();
+        FirefoxOptions options = new FirefoxOptions();
         driverRemote.set(new RemoteWebDriver(new URL(remote_url_firefox), options));
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
