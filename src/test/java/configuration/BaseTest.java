@@ -1,5 +1,6 @@
 package configuration;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,6 +25,7 @@ public class BaseTest {
     @BeforeAll
     public static void baseSetUp() throws MalformedURLException {
         FirefoxOptions options = new FirefoxOptions();
+        WebDriverManager.firefoxdriver().setup();
         options.setBrowserVersion("109.0");
         options.setPlatformName("LINUX");
         driver = new RemoteWebDriver(new URL(remote_url_firefox), options);
