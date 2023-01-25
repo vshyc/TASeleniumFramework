@@ -10,6 +10,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
+import org.testcontainers.utility.DockerImageName;
 import properties.EnvConfig;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DockerClientBuilder;
@@ -32,10 +33,8 @@ public class BaseTest {
 
     @BeforeAll
     public static void baseSetUp(){
-        firefox = new BrowserWebDriverContainer()
-                .withRecordingMode(RECORD_ALL, new File("target"))
+        firefox = new BrowserWebDriverContainer(DockerImageName.parse("seleniarm/standalone-firefox"))
                 .withCapabilities(new FirefoxOptions());
-        firefox.setDockerImageName("seleniarm/standalone-firefox");
         firefox.start();
         driver = firefox.getWebDriver();
         driver.manage().window().maximize();
