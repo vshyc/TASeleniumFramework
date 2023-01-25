@@ -31,10 +31,11 @@ public class BaseTest {
     private static BrowserWebDriverContainer firefox;
 
     @BeforeAll
-    public static void baseSetUp() throws MalformedURLException {
+    public static void baseSetUp(){
         firefox = new BrowserWebDriverContainer()
                 .withRecordingMode(RECORD_ALL, new File("target"))
                 .withCapabilities(new FirefoxOptions());
+        firefox.setDockerImageName("seleniarm/standalone-firefox");
         firefox.start();
         driver = firefox.getWebDriver();
         driver.manage().window().maximize();
