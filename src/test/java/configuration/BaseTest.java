@@ -29,11 +29,12 @@ public class BaseTest {
     public static WebDriver driver;
     public static String remote_url_firefox = "http://localhost:4444";
     public static EnvConfig envConfig = ConfigFactory.create(EnvConfig.class);
-    private static BrowserWebDriverContainer firefox;
 
     @BeforeAll
     public static void baseSetUp(){
-        firefox = new BrowserWebDriverContainer(DockerImageName.parse("seleniarm/standalone-firefox"))
+        BrowserWebDriverContainer firefox = new BrowserWebDriverContainer(
+                DockerImageName.parse("seleniarm/standalone-firefox")
+                        .asCompatibleSubstituteFor("selenium/standalone-chrome"))
                 .withCapabilities(new FirefoxOptions());
         firefox.start();
         driver = firefox.getWebDriver();
