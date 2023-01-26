@@ -6,38 +6,30 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.testcontainers.utility.DockerImageName;
 import properties.EnvConfig;
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.core.DockerClientBuilder;
-import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.BrowserWebDriverContainer;
-import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL;
 
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 public class BaseTest {
     public static Wait<WebDriver> wait;
     public static WebDriver driver;
-    public static String remote_url_firefox = "http://localhost:4444";
     public static EnvConfig envConfig = ConfigFactory.create(EnvConfig.class);
+
 
     @BeforeAll
     public static void baseSetUp(){
-        BrowserWebDriverContainer firefox = new BrowserWebDriverContainer(
-                DockerImageName.parse("seleniarm/standalone-firefox")
-                        .asCompatibleSubstituteFor("selenium/standalone-chrome"))
-                .withCapabilities(new FirefoxOptions());
-        firefox.start();
-        driver = firefox.getWebDriver();
+        if (System.getenv("docker").equalsIgnoreCase("true")) {
+            dockerConfig();
+        } else {
+            mangerConfig();
+        }
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         wait = new FluentWait<>(driver)
@@ -50,6 +42,20 @@ public class BaseTest {
     @AfterAll
     public static void tearDown() {
         driver.quit();
+    }
+
+    private static void dockerConfig() {
+        BrowserWebDriverContainer firefox = new BrowserWebDriverContainer(
+                DockerImageName.parse("seleniarm/standalone-firefox")
+                        .asCompatibleSubstituteFor("selenium/standalone-chrome"))
+                .withCapabilities(new FirefoxOptions());
+        firefox.withStartupTimeout(Duration.ofSeconds(20)).start();
+        driver = firefox.getWebDriver();
+    }
+
+    private static void mangerConfig(){
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
     }
 
 }
