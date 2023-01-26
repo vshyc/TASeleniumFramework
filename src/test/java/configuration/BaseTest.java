@@ -8,6 +8,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.testcontainers.utility.DockerImageName;
@@ -15,7 +16,6 @@ import properties.EnvConfig;
 import org.testcontainers.containers.BrowserWebDriverContainer;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 public class BaseTest {
     public static Wait<WebDriver> wait;
@@ -49,8 +49,8 @@ public class BaseTest {
                 DockerImageName.parse("seleniarm/standalone-firefox")
                         .asCompatibleSubstituteFor("selenium/standalone-chrome"))
                 .withCapabilities(new FirefoxOptions());
-        firefox.withStartupTimeout(Duration.ofSeconds(20)).start();
-        driver = firefox.getWebDriver();
+        firefox.start();
+        driver = new RemoteWebDriver(firefox.getSeleniumAddress(), new FirefoxOptions());
     }
 
     private static void mangerConfig(){
